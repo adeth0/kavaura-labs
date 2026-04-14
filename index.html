@@ -348,6 +348,7 @@
     section {
       position: relative;
       padding: 100px 24px;
+      scroll-margin-top: 64px;
     }
 
     .container {
@@ -933,7 +934,8 @@
 
     /* ─── Contact ──────────────────────────────────────── */
     #contact {
-      background: var(--bg);
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
     }
 
     .contact-grid {
@@ -1603,7 +1605,7 @@
         </div>
 
         <!-- Right: form -->
-        <div class="form-card reveal reveal-delay-2">
+        <div class="form-card">
           <form
             id="contactForm"
             action="https://formspree.io/f/xaqanwba"
@@ -1794,8 +1796,8 @@
         }
       });
     }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px -20px 0px'
     });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -1907,11 +1909,16 @@
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const hash = anchor.getAttribute('href');
+        // Skip bare "#" links — no valid target
+        if (!hash || hash === '#') return;
+        try {
+          const target = document.querySelector(hash);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } catch (_) { /* invalid selector — do nothing */ }
       });
     });
   </script>
