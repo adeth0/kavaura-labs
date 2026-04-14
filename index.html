@@ -938,6 +938,25 @@
       border-top: 1px solid var(--border);
     }
 
+    /* Formspree library hides these via [hidden] attribute */
+    [data-fs-success],
+    [data-fs-error-box] {
+      display: none;
+    }
+    [data-fs-success]:not([hidden]),
+    [data-fs-error-box]:not([hidden]) {
+      display: flex;
+    }
+
+    /* Field-level error messages */
+    .field-error {
+      font-size: 11px;
+      color: #fb7185;
+      margin-top: -10px;
+      min-height: 16px;
+      line-height: 1.4;
+    }
+
     .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1.4fr;
@@ -1559,42 +1578,34 @@
   </section>
 
   <!-- ─── Contact ──────────────────────────────────── -->
-  <!--
-    SETUP: To activate form email delivery:
-    1. Go to https://formspree.io and sign in with your ProtonMail
-    2. Create a new form — your email is stored securely in Formspree, never in this HTML
-    3. Copy your form ID (e.g. "xpzgkrve")
-    4. Replace YOUR_FORM_ID below with your actual form ID
-    Free tier: 50 submissions/month, spam filtering included.
-  -->
   <section id="contact">
     <div class="container">
       <div class="contact-grid">
 
         <!-- Left: info -->
         <div class="contact-info">
-          <p class="section-label reveal">Get In Touch</p>
-          <h2 class="section-title reveal reveal-delay-1">Let's talk.</h2>
-          <p class="section-subtitle reveal reveal-delay-2">
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title">Let's talk.</h2>
+          <p class="section-subtitle">
             Have a question about our products, a partnership idea, or just want to say hello? We'd love to hear from you.
           </p>
 
           <div style="margin-top: 36px; display: flex; flex-direction: column; gap: 10px;">
-            <div class="contact-detail reveal reveal-delay-1">
+            <div class="contact-detail">
               <div class="contact-detail-icon">💬</div>
               <div class="contact-detail-body">
                 <h5>General Enquiries</h5>
                 <p>Questions about Kavaura Labs or our products</p>
               </div>
             </div>
-            <div class="contact-detail reveal reveal-delay-2">
+            <div class="contact-detail">
               <div class="contact-detail-icon">🤝</div>
               <div class="contact-detail-body">
                 <h5>Partnerships</h5>
                 <p>Collaboration, integration, or business enquiries</p>
               </div>
             </div>
-            <div class="contact-detail reveal reveal-delay-3">
+            <div class="contact-detail">
               <div class="contact-detail-icon">💡</div>
               <div class="contact-detail-body">
                 <h5>Suggestions &amp; Feedback</h5>
@@ -1604,14 +1615,29 @@
           </div>
         </div>
 
-        <!-- Right: form -->
+        <!-- Right: form (Formspree Vanilla JS Ajax) -->
         <div class="form-card">
-          <form
-            id="contactForm"
-            action="https://formspree.io/f/xaqanwba"
-            method="POST"
-            novalidate
-          >
+
+          <!-- Global success state (shown by Formspree library after submit) -->
+          <div class="form-status form-status-success" data-fs-success hidden>
+            <div class="form-status-icon">✓</div>
+            <div class="form-status-body">
+              <h5>Message sent!</h5>
+              <p>Thanks for reaching out. We'll be in touch as soon as possible.</p>
+            </div>
+          </div>
+
+          <!-- Global error state -->
+          <div class="form-status form-status-error" data-fs-error-box hidden>
+            <div class="form-status-icon">!</div>
+            <div class="form-status-body">
+              <h5>Something went wrong</h5>
+              <p data-fs-error>Please check your details and try again.</p>
+            </div>
+          </div>
+
+          <form id="contactForm">
+
             <!-- Name + Email -->
             <div class="form-row">
               <div class="form-group">
@@ -1623,8 +1649,10 @@
                   name="name"
                   placeholder="Your name"
                   autocomplete="name"
+                  data-fs-field
                   required
                 >
+                <span class="field-error" data-fs-error="name"></span>
               </div>
               <div class="form-group">
                 <label class="form-label" for="cf-email">Email</label>
@@ -1635,15 +1663,17 @@
                   name="email"
                   placeholder="you@example.com"
                   autocomplete="email"
+                  data-fs-field
                   required
                 >
+                <span class="field-error" data-fs-error="email"></span>
               </div>
             </div>
 
-            <!-- Subject -->
+            <!-- Topic -->
             <div class="form-group">
               <label class="form-label" for="cf-subject">Topic</label>
-              <select class="form-select" id="cf-subject" name="subject" required>
+              <select class="form-select" id="cf-subject" name="subject" data-fs-field required>
                 <option value="" disabled selected>Select a topic…</option>
                 <option value="General Enquiry">General Enquiry</option>
                 <option value="SpendMapr">SpendMapr</option>
@@ -1653,6 +1683,7 @@
                 <option value="Feedback">Feedback</option>
                 <option value="Other">Other</option>
               </select>
+              <span class="field-error" data-fs-error="subject"></span>
             </div>
 
             <!-- Message -->
@@ -1664,9 +1695,11 @@
                 name="message"
                 placeholder="Write your message here…"
                 maxlength="2000"
+                data-fs-field
                 required
               ></textarea>
               <span class="char-counter" id="msgCounter">0 / 2000</span>
+              <span class="field-error" data-fs-error="message"></span>
             </div>
 
             <!-- Divider -->
@@ -1674,7 +1707,7 @@
               <span class="form-divider-label">Optional</span>
             </div>
 
-            <!-- Suggestions (optional) -->
+            <!-- Suggestions -->
             <div class="form-group">
               <label class="form-label" for="cf-suggestions">
                 Suggestions
@@ -1690,7 +1723,7 @@
               <p class="field-hint">Share anything — product ideas, UX feedback, integrations you'd love to see.</p>
             </div>
 
-            <!-- Submit row -->
+            <!-- Submit -->
             <div class="form-submit-row">
               <p class="form-privacy">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -1698,7 +1731,7 @@
                 </svg>
                 Your message is sent securely. We never share your details.
               </p>
-              <button type="submit" class="btn-submit" id="submitBtn">
+              <button type="submit" class="btn-submit" data-fs-submit-btn>
                 <div class="spinner"></div>
                 <span class="btn-text">
                   Send Message
@@ -1707,22 +1740,6 @@
                   </svg>
                 </span>
               </button>
-            </div>
-
-            <!-- Status messages -->
-            <div class="form-status form-status-success" id="formSuccess">
-              <div class="form-status-icon">✓</div>
-              <div class="form-status-body">
-                <h5>Message sent!</h5>
-                <p>Thanks for reaching out. We'll be in touch as soon as possible.</p>
-              </div>
-            </div>
-            <div class="form-status form-status-error" id="formError">
-              <div class="form-status-icon">!</div>
-              <div class="form-status-body">
-                <h5>Something went wrong</h5>
-                <p>Please try again in a moment. If the issue persists, check your form configuration.</p>
-              </div>
             </div>
 
           </form>
@@ -1825,86 +1842,25 @@
       lastY = currentY;
     }, { passive: true });
 
-    // ── Contact form ─────────────────────────────────────
-    const form       = document.getElementById('contactForm');
-    const submitBtn  = document.getElementById('submitBtn');
-    const successBox = document.getElementById('formSuccess');
-    const errorBox   = document.getElementById('formError');
+    // ── Formspree (official Vanilla JS Ajax library) ──────
+    // Handles submission, field errors, success state, and button disable.
+    window.formspree = window.formspree || function () {
+      (formspree.q = formspree.q || []).push(arguments);
+    };
+    formspree('initForm', { formElement: '#contactForm', formId: 'xaqanwba' });
+
+    // ── Character counter (independent of Formspree) ──────
     const msgArea    = document.getElementById('cf-message');
     const msgCounter = document.getElementById('msgCounter');
-
-    // Character counter for message
-    msgArea.addEventListener('input', () => {
-      const len = msgArea.value.length;
-      const max = parseInt(msgArea.getAttribute('maxlength'), 10);
-      msgCounter.textContent = `${len} / ${max}`;
-      msgCounter.classList.toggle('warn',  len > max * 0.8);
-      msgCounter.classList.toggle('limit', len >= max);
-    });
-
-    // Live validation: remove error class on fix
-    form.querySelectorAll('.form-input, .form-textarea').forEach(el => {
-      el.addEventListener('input', () => el.classList.remove('error'));
-    });
-
-    // Validate required fields
-    function validateForm() {
-      let valid = true;
-      ['cf-name', 'cf-email', 'cf-message'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el.value.trim()) {
-          el.classList.add('error');
-          valid = false;
-        }
+    if (msgArea && msgCounter) {
+      msgArea.addEventListener('input', () => {
+        const len = msgArea.value.length;
+        const max = parseInt(msgArea.getAttribute('maxlength'), 10);
+        msgCounter.textContent = `${len} / ${max}`;
+        msgCounter.classList.toggle('warn',  len > max * 0.8);
+        msgCounter.classList.toggle('limit', len >= max);
       });
-      const emailEl = document.getElementById('cf-email');
-      if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
-        emailEl.classList.add('error');
-        valid = false;
-      }
-      const subjectEl = document.getElementById('cf-subject');
-      if (!subjectEl.value) {
-        subjectEl.style.borderColor = 'rgba(251,113,133,0.5)';
-        subjectEl.addEventListener('change', () => subjectEl.style.borderColor = '', { once: true });
-        valid = false;
-      }
-      return valid;
     }
-
-    // Submit handler
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      successBox.classList.remove('show');
-      errorBox.classList.remove('show');
-
-      if (!validateForm()) return;
-
-      submitBtn.disabled = true;
-      submitBtn.classList.add('loading');
-
-      try {
-        const data = new FormData(form);
-        const res  = await fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (res.ok) {
-          form.reset();
-          msgCounter.textContent = '0 / 2000';
-          successBox.classList.add('show');
-          successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else {
-          errorBox.classList.add('show');
-        }
-      } catch {
-        errorBox.classList.add('show');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
-      }
-    });
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1922,6 +1878,9 @@
       });
     });
   </script>
+
+  <!-- Formspree official Ajax library (handles submit, errors, success) -->
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 
 </body>
 </html>
