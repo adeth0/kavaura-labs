@@ -86,16 +86,51 @@
     }
 
     .nav-logo {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      color: var(--text-primary);
-      text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      text-decoration: none;
+      flex-shrink: 0;
     }
 
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(108,140,255,0.35));
+      transition: filter var(--transition);
+    }
+
+    .nav-logo:hover .nav-logo-img {
+      filter: drop-shadow(0 0 16px rgba(108,140,255,0.6));
+    }
+
+    /* hero logo mark */
+    .hero-logo-img {
+      height: 104px;
+      width: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 28px rgba(108,140,255,0.45))
+              drop-shadow(0 0 60px rgba(167,139,250,0.2));
+      opacity: 0;
+      animation: fadeUp 0.8s 0.05s forwards;
+    }
+
+    /* footer logo */
+    .footer-logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 6px rgba(108,140,255,0.25));
+      opacity: 0.8;
+      transition: opacity var(--transition), filter var(--transition);
+    }
+
+    .footer-logo-img:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 12px rgba(108,140,255,0.45));
+    }
+
+    /* keep dot for hero eyebrow */
     .nav-logo-dot {
       width: 8px;
       height: 8px;
@@ -807,13 +842,8 @@
     }
 
     .footer-logo {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      color: var(--text-primary);
       display: flex;
       align-items: center;
-      gap: 8px;
     }
 
     .footer-tagline {
@@ -1343,6 +1373,10 @@
       .form-row     { grid-template-columns: 1fr; }
       .form-submit-row { flex-direction: column; align-items: stretch; }
       .btn-submit { justify-content: center; }
+
+      .nav-logo-img  { height: 34px; }
+      .hero-logo-img { height: 80px; }
+      .footer-logo-img { height: 30px; }
     }
 
     @media (max-width: 480px) {
@@ -1357,9 +1391,8 @@
 
   <!-- ─── Navigation ─────────────────────────────────── -->
   <nav>
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-dot"></span>
-      Kavaura Labs
+    <a href="#home" class="nav-logo">
+      <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="nav-logo-img">
     </a>
     <ul class="nav-links">
       <li><a href="#products">Products</a></li>
@@ -1373,6 +1406,8 @@
   <section class="hero" id="home">
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
+
+    <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="hero-logo-img">
 
     <div class="hero-eyebrow">
       <span class="hero-eyebrow-dot"></span>
@@ -1756,8 +1791,7 @@
       <div class="footer-top">
         <div class="footer-brand">
           <div class="footer-logo">
-            <span class="nav-logo-dot"></span>
-            Kavaura Labs
+            <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="footer-logo-img">
           </div>
           <p class="footer-tagline">
             Building intelligent applications for life, health, and finance.
