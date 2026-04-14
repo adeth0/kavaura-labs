@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kavaura Labs — Building intelligent apps for life, health, and finance.">
+  <title>Kavaura Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #080c14;
+      --bg-2:         #0d1220;
+      --surface:      rgba(255,255,255,0.04);
+      --surface-hover:rgba(255,255,255,0.07);
+      --border:       rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.16);
+      --text-primary: #f0f4ff;
+      --text-secondary:#8a95b0;
+      --text-muted:   #4d566b;
+      --accent:       #6c8cff;
+      --accent-2:     #a78bfa;
+      --accent-3:     #34d399;
+      --radius-sm:    12px;
+      --radius-md:    20px;
+      --radius-lg:    28px;
+      --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ─── Scrollbar ─────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(108,140,255,0.3); border-radius: 3px; }
+
+    /* ─── Noise texture overlay ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── Navigation ────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 12, 20, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(108,140,255,0.35));
+      transition: filter var(--transition);
+    }
+
+    .nav-logo:hover .nav-logo-img {
+      filter: drop-shadow(0 0 16px rgba(108,140,255,0.6));
+    }
+
+    /* hero logo mark */
+    .hero-logo-img {
+      height: 104px;
+      width: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 28px rgba(108,140,255,0.45))
+              drop-shadow(0 0 60px rgba(167,139,250,0.2));
+      opacity: 0;
+      animation: fadeUp 0.8s 0.05s forwards;
+    }
+
+    /* footer logo */
+    .footer-logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 6px rgba(108,140,255,0.25));
+      opacity: 0.8;
+      transition: opacity var(--transition), filter var(--transition);
+    }
+
+    .footer-logo-img:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 12px rgba(108,140,255,0.45));
+    }
+
+    /* keep dot for hero eyebrow */
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 8px rgba(108,140,255,0.6);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition);
+      letter-spacing: 0.1px;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary) !important;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 999px;
+      transition: all var(--transition) !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--surface-hover) !important;
+      border-color: var(--border-hover) !important;
+    }
+
+    /* ─── Ambient glows ─────────────────────────────────── */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      opacity: 0.18;
+    }
+
+    .glow-1 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, #6c8cff 0%, transparent 70%);
+      top: -200px;
+      left: -100px;
+    }
+
+    .glow-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+      top: -100px;
+      right: -50px;
+    }
+
+    /* ─── Hero ──────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(108,140,255,0.1);
+      border: 1px solid rgba(108,140,255,0.2);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s forwards;
+    }
+
+    .hero-eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1.0;
+      background: linear-gradient(135deg, #ffffff 0%, #c8d4ff 40%, #a78bfa 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s forwards;
+    }
+
+    .hero-tagline {
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-weight: 500;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s forwards;
+    }
+
+    .hero-subtext {
+      font-size: clamp(15px, 1.6vw, 17px);
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.65s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 32px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 0 30px rgba(108,140,255,0.25), 0 4px 16px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(108,140,255,0.4), 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 32px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-secondary:hover {
+      color: var(--text-primary);
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s forwards;
+    }
+
+    .scroll-indicator span {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(108,140,255,0.5), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ─── Section layout ────────────────────────────────── */
+    section {
+      position: relative;
+      padding: 100px 24px;
+      scroll-margin-top: 64px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--text-secondary);
+      max-width: 580px;
+      line-height: 1.65;
+    }
+
+    /* ─── Products ──────────────────────────────────────── */
+    #products {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .products-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .products-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px 40px;
+      transition: all var(--transition);
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(108,140,255,0.05);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-glow {
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+
+    .card:hover .card-glow { opacity: 0.12; }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 22px;
+      position: relative;
+    }
+
+    .card-icon-spend {
+      background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(16,185,129,0.05));
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+
+    .card-icon-flight {
+      background: linear-gradient(135deg, rgba(108,140,255,0.15), rgba(99,102,241,0.05));
+      border: 1px solid rgba(108,140,255,0.2);
+    }
+
+    .card-icon-health {
+      background: linear-gradient(135deg, rgba(251,113,133,0.15), rgba(244,63,94,0.05));
+      border: 1px solid rgba(251,113,133,0.2);
+    }
+
+    .card-glow-spend  { background: #34d399; }
+    .card-glow-flight { background: #6c8cff; }
+    .card-glow-health { background: #fb7185; }
+
+    .card-name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    .badge-spend  { background: rgba(52,211,153,0.1);  color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .badge-flight { background: rgba(108,140,255,0.1); color: #6c8cff; border: 1px solid rgba(108,140,255,0.2); }
+    .badge-health { background: rgba(251,113,133,0.1); color: #fb7185; border: 1px solid rgba(251,113,133,0.2); }
+
+    .card-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .card-integrations {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .integration-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--transition);
+      margin-top: 8px;
+    }
+
+    .card-link-spend  { color: #34d399; }
+    .card-link-flight { color: #6c8cff; }
+    .card-link-health { color: #fb7185; }
+
+    .card-link:hover { gap: 10px; }
+
+    .card-link svg {
+      transition: transform var(--transition);
+    }
+
+    .card-link:hover svg { transform: translateX(3px); }
+
+    /* ─── What We Do ────────────────────────────────────── */
+    #what-we-do {
+      background: var(--bg);
+    }
+
+    .what-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-top: 64px;
+    }
+
+    .what-text .section-subtitle {
+      max-width: 100%;
+      margin-bottom: 32px;
+    }
+
+    .pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pillar {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all var(--transition);
+    }
+
+    .pillar:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+    }
+
+    .pillar-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pillar h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .pillar p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .what-visual {
+      position: relative;
+      height: 380px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .what-visual-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(108,140,255,0.08);
+    }
+
+    .orbit-ring-1 { width: 200px; height: 200px; animation: rotate 20s linear infinite; }
+    .orbit-ring-2 { width: 300px; height: 300px; animation: rotate 30s linear infinite reverse; }
+    .orbit-ring-3 { width: 400px; height: 400px; animation: rotate 40s linear infinite; }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .orbit-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .center-badge {
+      position: relative;
+      z-index: 2;
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(108,140,255,0.2), rgba(167,139,250,0.1));
+      border: 1px solid rgba(108,140,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 0 40px rgba(108,140,255,0.15);
+    }
+
+    /* ─── About ─────────────────────────────────────────── */
+    #about {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(108,140,255,0.3), transparent);
+    }
+
+    .founder-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 0 24px rgba(108,140,255,0.3);
+    }
+
+    .founder-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .founder-role {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 24px;
+      letter-spacing: 0.1px;
+    }
+
+    .founder-bio {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .founder-bio + .founder-bio {
+      margin-top: 16px;
+    }
+
+    .about-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .stat-item {
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all var(--transition);
+    }
+
+    .stat-item:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+    }
+
+    .stat-value {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ─── Footer ────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      padding: 60px 24px 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 260px;
+      line-height: 1.6;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .footer-nav-group h5 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-nav-group ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-nav-group a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-nav-group a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .footer-copy strong {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .footer-badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      box-shadow: 0 0 6px rgba(52,211,153,0.6);
+      animation: pulse 2s infinite;
+    }
+
+    /* ─── Divider ───────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ─── Animations ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Contact ──────────────────────────────────────── */
+    #contact {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Formspree library hides these via [hidden] attribute */
+    [data-fs-success],
+    [data-fs-error-box] {
+      display: none;
+    }
+    [data-fs-success]:not([hidden]),
+    [data-fs-error-box]:not([hidden]) {
+      display: flex;
+    }
+
+    /* Field-level error messages */
+    .field-error {
+      font-size: 11px;
+      color: #fb7185;
+      margin-top: -10px;
+      min-height: 16px;
+      line-height: 1.4;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info {
+      padding-top: 8px;
+    }
+
+    .contact-info .section-subtitle {
+      max-width: 100%;
+      margin-bottom: 36px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      transition: all var(--transition);
+    }
+
+    .contact-detail:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+    }
+
+    .contact-detail-icon {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .contact-detail-body h5 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .contact-detail-body p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(108,140,255,0.25), rgba(167,139,250,0.2), transparent);
+    }
+
+    /* Field group */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-label-optional {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: none;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 999px;
+      opacity: 0.75;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-input:hover,
+    .form-select:hover,
+    .form-textarea:hover {
+      border-color: var(--border-hover);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: rgba(108,140,255,0.5);
+      background: rgba(108,140,255,0.04);
+      box-shadow: 0 0 0 3px rgba(108,140,255,0.1);
+    }
+
+    .form-input.error,
+    .form-textarea.error {
+      border-color: rgba(251,113,133,0.5);
+      box-shadow: 0 0 0 3px rgba(251,113,133,0.08);
+    }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234d566b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: #0d1220;
+      color: var(--text-primary);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.6;
+    }
+
+    .form-textarea.suggestions-area {
+      min-height: 80px;
+      border-style: dashed;
+    }
+
+    .form-textarea.suggestions-area:focus {
+      border-style: solid;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: -4px;
+      line-height: 1.5;
+    }
+
+    .char-counter {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: -4px;
+      transition: color var(--transition);
+    }
+
+    .char-counter.warn  { color: #f59e0b; }
+    .char-counter.limit { color: #fb7185; }
+
+    /* Submit row */
+    .form-submit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .form-privacy {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .form-privacy svg {
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 0 24px rgba(108,140,255,0.2);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.12);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(108,140,255,0.35);
+    }
+
+    .btn-submit:hover:not(:disabled)::before { opacity: 1; }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-submit .spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    /* Form status messages */
+    .form-status {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-top: 24px;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .form-status.show { display: flex; }
+
+    .form-status-success {
+      background: rgba(52,211,153,0.07);
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+
+    .form-status-error {
+      background: rgba(251,113,133,0.07);
+      border: 1px solid rgba(251,113,133,0.2);
+    }
+
+    .form-status-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .form-status-success .form-status-icon {
+      background: rgba(52,211,153,0.15);
+    }
+
+    .form-status-error .form-status-icon {
+      background: rgba(251,113,133,0.15);
+    }
+
+    .form-status-body h5 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .form-status-success .form-status-body h5 { color: #34d399; }
+    .form-status-error   .form-status-body h5 { color: #fb7185; }
+
+    .form-status-body p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* Divider inside form */
+    .form-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 24px 0;
+      position: relative;
+    }
+
+    .form-divider-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-2);
+      padding: 0 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ─── Responsive ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+
+      section { padding: 72px 20px; }
+
+      .what-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .what-visual { height: 280px; }
+
+      .footer-top { flex-direction: column; }
+      .footer-nav { gap: 32px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row     { grid-template-columns: 1fr; }
+      .form-submit-row { flex-direction: column; align-items: stretch; }
+      .btn-submit { justify-content: center; }
+
+      .nav-logo-img  { height: 34px; }
+      .hero-logo-img { height: 80px; }
+      .footer-logo-img { height: 30px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+      .form-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ─── Navigation ─────────────────────────────────── -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#what-we-do">What We Do</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero ───────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="hero-logo-img">
+
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Technology · Finance · Health · Data
+    </div>
+
+    <h1>Kavaura Labs</h1>
+
+    <p class="hero-tagline">
+      Building intelligent apps for life,&nbsp;health, and&nbsp;finance.
+    </p>
+
+    <p class="hero-subtext">
+      We create modern tools that help people understand and improve
+      the most important parts of their lives.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#products" class="btn-primary">
+        View Apps
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#about" class="btn-secondary">
+        Learn More
+      </a>
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ─── Products ──────────────────────────────────── -->
+  <section id="products">
+    <div class="container">
+
+      <div class="products-header">
+        <p class="section-label reveal">Our Products</p>
+        <h2 class="section-title reveal reveal-delay-1">Three platforms.<br>One vision.</h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          Precision-built tools that turn raw data into clear, actionable insight — for your money, your travels, and your health.
+        </p>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- SpendMapr -->
+        <div class="card reveal reveal-delay-1">
+          <div class="card-glow card-glow-spend"></div>
+          <div class="card-icon card-icon-spend">💳</div>
+          <div class="card-name">SpendMapr</div>
+          <span class="card-badge badge-spend">Finance</span>
+          <p class="card-desc">
+            A personal finance platform that helps you understand your money, track spending, improve your financial health, and make smarter decisions through data-driven insights.
+          </p>
+          <a href="https://spend.kavauralabs.com" class="card-link card-link-spend" target="_blank" rel="noopener">
+            Open SpendMapr
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- FlightMapr -->
+        <div class="card reveal reveal-delay-2">
+          <div class="card-glow card-glow-flight"></div>
+          <div class="card-icon card-icon-flight">✈️</div>
+          <div class="card-name">FlightMapr</div>
+          <span class="card-badge badge-flight">Aviation</span>
+          <p class="card-desc">
+            A real-time flight tracking and aviation insights platform that allows users to monitor flights, explore global air traffic, and interact with live aviation data in an intuitive way.
+          </p>
+          <a href="https://flight.kavauralabs.com" class="card-link card-link-flight" target="_blank" rel="noopener">
+            Open FlightMapr
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- HealthMapr -->
+        <div class="card reveal reveal-delay-3">
+          <div class="card-glow card-glow-health"></div>
+          <div class="card-icon card-icon-health">❤️</div>
+          <div class="card-name">HealthMapr</div>
+          <span class="card-badge badge-health">Health & Wellbeing</span>
+          <p class="card-desc">
+            An all-in-one health and wellbeing platform designed to integrate activity data, fitness tracking, and lifestyle metrics into a single dashboard to help users improve their overall health.
+          </p>
+          <div class="card-integrations" style="margin-bottom: 24px;">
+            <span class="integration-tag">Apple Health</span>
+            <span class="integration-tag">Android Health</span>
+            <span class="integration-tag">Strava</span>
+          </div>
+          <a href="https://health.kavauralabs.com" class="card-link card-link-health" target="_blank" rel="noopener">
+            Open HealthMapr
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── What We Do ────────────────────────────────── -->
+  <section id="what-we-do">
+    <div class="container">
+      <div class="what-grid">
+
+        <div class="what-text">
+          <p class="section-label reveal">Our Approach</p>
+          <h2 class="section-title reveal reveal-delay-1">Data, design,<br>and technology.</h2>
+          <p class="section-subtitle reveal reveal-delay-2">
+            Kavaura Labs builds applications that combine data, design, and technology to deliver meaningful insights in areas that matter most — health, finance, and lifestyle.
+          </p>
+
+          <div class="pillars" style="margin-top: 36px;">
+            <div class="pillar reveal reveal-delay-1">
+              <div class="pillar-icon">📊</div>
+              <div>
+                <h4>Data-Driven Insights</h4>
+                <p>We transform complex personal data into clear, meaningful signals you can actually act on.</p>
+              </div>
+            </div>
+            <div class="pillar reveal reveal-delay-2">
+              <div class="pillar-icon">🎨</div>
+              <div>
+                <h4>Design-First Thinking</h4>
+                <p>Every interface is crafted for clarity — no clutter, no noise, just the information you need.</p>
+              </div>
+            </div>
+            <div class="pillar reveal reveal-delay-3">
+              <div class="pillar-icon">⚙️</div>
+              <div>
+                <h4>Modern Infrastructure</h4>
+                <p>Built on reliable, scalable cloud infrastructure engineered for performance and privacy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="what-visual reveal reveal-delay-2" aria-hidden="true">
+          <div class="orbit-ring orbit-ring-1">
+            <div class="orbit-dot" style="background: #34d399; box-shadow: 0 0 8px #34d399;"></div>
+          </div>
+          <div class="orbit-ring orbit-ring-2">
+            <div class="orbit-dot" style="background: #6c8cff; box-shadow: 0 0 8px #6c8cff;"></div>
+          </div>
+          <div class="orbit-ring orbit-ring-3">
+            <div class="orbit-dot" style="background: #fb7185; box-shadow: 0 0 8px #fb7185;"></div>
+          </div>
+          <div class="center-badge">🧠</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── About ─────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-card reveal">
+          <div class="founder-avatar">MK</div>
+          <div class="founder-name">Martin Kavanagh</div>
+          <div class="founder-role">Founder · Cloud Infrastructure Engineer &amp; Developer</div>
+          <p class="founder-bio">
+            Kavaura Labs is led by Martin Kavanagh, a cloud infrastructure engineer and developer with over 25 years of experience building and managing systems across a wide range of technologies.
+          </p>
+          <p class="founder-bio" style="margin-top: 16px;">
+            We are a small, focused team dedicated to building high-quality applications that provide real value and help people make better decisions in their daily lives.
+          </p>
+        </div>
+
+        <div class="about-stats">
+          <p class="section-label reveal">About</p>
+          <h2 class="section-title reveal reveal-delay-1">Built with purpose,<br>by people who care.</h2>
+
+          <div class="stat-item reveal reveal-delay-1">
+            <div class="stat-value">25+</div>
+            <div class="stat-label">Years of engineering experience</div>
+          </div>
+
+          <div class="stat-item reveal reveal-delay-2">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Platforms across health, finance & aviation</div>
+          </div>
+
+          <div class="stat-item reveal reveal-delay-3">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Clear mission — build tools that genuinely help</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Contact ──────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Left: info -->
+        <div class="contact-info">
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title">Let's talk.</h2>
+          <p class="section-subtitle">
+            Have a question about our products, a partnership idea, or just want to say hello? We'd love to hear from you.
+          </p>
+
+          <div style="margin-top: 36px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="contact-detail">
+              <div class="contact-detail-icon">💬</div>
+              <div class="contact-detail-body">
+                <h5>General Enquiries</h5>
+                <p>Questions about Kavaura Labs or our products</p>
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon">🤝</div>
+              <div class="contact-detail-body">
+                <h5>Partnerships</h5>
+                <p>Collaboration, integration, or business enquiries</p>
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon">💡</div>
+              <div class="contact-detail-body">
+                <h5>Suggestions &amp; Feedback</h5>
+                <p>Ideas to improve our apps or shape what we build next</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form (Formspree Vanilla JS Ajax) -->
+        <div class="form-card">
+
+          <!-- Global success state (shown by Formspree library after submit) -->
+          <div class="form-status form-status-success" data-fs-success hidden>
+            <div class="form-status-icon">✓</div>
+            <div class="form-status-body">
+              <h5>Message sent!</h5>
+              <p>Thanks for reaching out. We'll be in touch as soon as possible.</p>
+            </div>
+          </div>
+
+          <!-- Global error state -->
+          <div class="form-status form-status-error" data-fs-error-box hidden>
+            <div class="form-status-icon">!</div>
+            <div class="form-status-body">
+              <h5>Something went wrong</h5>
+              <p data-fs-error>Please check your details and try again.</p>
+            </div>
+          </div>
+
+          <form id="contactForm">
+
+            <!-- Name + Email -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cf-name">Name</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="cf-name"
+                  name="name"
+                  placeholder="Your name"
+                  autocomplete="name"
+                  data-fs-field
+                  required
+                >
+                <span class="field-error" data-fs-error="name"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cf-email">Email</label>
+                <input
+                  class="form-input"
+                  type="email"
+                  id="cf-email"
+                  name="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  data-fs-field
+                  required
+                >
+                <span class="field-error" data-fs-error="email"></span>
+              </div>
+            </div>
+
+            <!-- Topic -->
+            <div class="form-group">
+              <label class="form-label" for="cf-subject">Topic</label>
+              <select class="form-select" id="cf-subject" name="subject" data-fs-field required>
+                <option value="" disabled selected>Select a topic…</option>
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="SpendMapr">SpendMapr</option>
+                <option value="FlightMapr">FlightMapr</option>
+                <option value="HealthMapr">HealthMapr</option>
+                <option value="Partnership">Partnership / Collaboration</option>
+                <option value="Feedback">Feedback</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="field-error" data-fs-error="subject"></span>
+            </div>
+
+            <!-- Message -->
+            <div class="form-group">
+              <label class="form-label" for="cf-message">Message</label>
+              <textarea
+                class="form-textarea"
+                id="cf-message"
+                name="message"
+                placeholder="Write your message here…"
+                maxlength="2000"
+                data-fs-field
+                required
+              ></textarea>
+              <span class="char-counter" id="msgCounter">0 / 2000</span>
+              <span class="field-error" data-fs-error="message"></span>
+            </div>
+
+            <!-- Divider -->
+            <div class="form-divider">
+              <span class="form-divider-label">Optional</span>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="form-group">
+              <label class="form-label" for="cf-suggestions">
+                Suggestions
+                <span class="form-label-optional">optional</span>
+              </label>
+              <textarea
+                class="form-textarea suggestions-area"
+                id="cf-suggestions"
+                name="suggestions"
+                placeholder="Any ideas, feature requests, or improvements you'd like to see? We read everything."
+                maxlength="1000"
+              ></textarea>
+              <p class="field-hint">Share anything — product ideas, UX feedback, integrations you'd love to see.</p>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-submit-row">
+              <p class="form-privacy">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M6.5 1C4.6 1 3 2.6 3 4.5V5H2v7h9V5H9v-.5C9 2.6 7.4 1 6.5 1zm0 1.2c1.1 0 1.8.9 1.8 2.3V5H4.7v-.5c0-1.4.7-2.3 1.8-2.3z" fill="currentColor" opacity=".6"/>
+                </svg>
+                Your message is sent securely. We never share your details.
+              </p>
+              <button type="submit" class="btn-submit" data-fs-submit-btn>
+                <div class="spinner"></div>
+                <span class="btn-text">
+                  Send Message
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:inline;vertical-align:middle;margin-left:4px;">
+                    <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────── -->
+  <footer id="footer">
+    <div class="footer-inner">
+
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="kavauralabs_logo.png" alt="Kavaura Labs" class="footer-logo-img">
+          </div>
+          <p class="footer-tagline">
+            Building intelligent applications for life, health, and finance.
+          </p>
+          <div class="footer-badge" style="margin-top: 4px; align-self: flex-start;">
+            <span class="footer-badge-dot"></span>
+            Actively building
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <div class="footer-nav-group">
+            <h5>Company</h5>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+
+            </ul>
+          </div>
+          <div class="footer-nav-group">
+            <h5>Products</h5>
+            <ul>
+              <li><a href="https://spend.kavauralabs.com" target="_blank" rel="noopener">SpendMapr</a></li>
+              <li><a href="https://flight.kavauralabs.com" target="_blank" rel="noopener">FlightMapr</a></li>
+              <li><a href="https://health.kavauralabs.com" target="_blank" rel="noopener">HealthMapr</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2024 Kavaura Labs. All rights reserved.<br>
+          <strong>Founded by Martin Kavanagh</strong> — Cloud Infrastructure Engineer &amp; Developer
+        </div>
+        <div class="footer-copy" style="text-align: right;">
+          Designed &amp; built in-house.<br>
+          Powered by modern web standards.
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ─── Scripts ────────────────────────────────────── -->
+  <script>
+    // Intersection Observer for scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -20px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth nav hide/show on scroll
+    let lastY = 0;
+    const nav = document.querySelector('nav');
+
+    window.addEventListener('scroll', () => {
+      const currentY = window.scrollY;
+
+      if (currentY > lastY && currentY > 120) {
+        nav.style.transform = 'translateY(-100%)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+
+      // Stronger background when scrolled
+      if (currentY > 40) {
+        nav.style.background = 'rgba(8, 12, 20, 0.92)';
+      } else {
+        nav.style.background = 'rgba(8, 12, 20, 0.7)';
+      }
+
+      lastY = currentY;
+    }, { passive: true });
+
+    // ── Formspree (official Vanilla JS Ajax library) ──────
+    // Handles submission, field errors, success state, and button disable.
+    window.formspree = window.formspree || function () {
+      (formspree.q = formspree.q || []).push(arguments);
+    };
+    formspree('initForm', { formElement: '#contactForm', formId: 'xaqanwba' });
+
+    // ── Character counter (independent of Formspree) ──────
+    const msgArea    = document.getElementById('cf-message');
+    const msgCounter = document.getElementById('msgCounter');
+    if (msgArea && msgCounter) {
+      msgArea.addEventListener('input', () => {
+        const len = msgArea.value.length;
+        const max = parseInt(msgArea.getAttribute('maxlength'), 10);
+        msgCounter.textContent = `${len} / ${max}`;
+        msgCounter.classList.toggle('warn',  len > max * 0.8);
+        msgCounter.classList.toggle('limit', len >= max);
+      });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const hash = anchor.getAttribute('href');
+        // Skip bare "#" links — no valid target
+        if (!hash || hash === '#') return;
+        try {
+          const target = document.querySelector(hash);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } catch (_) { /* invalid selector — do nothing */ }
+      });
+    });
+  </script>
+
+  <!-- Formspree official Ajax library (handles submit, errors, success) -->
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
